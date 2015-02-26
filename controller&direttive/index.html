@@ -1,0 +1,55 @@
+<html> 
+
+	<head>
+		<script 
+			src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.js">
+		</script>
+	</head>
+	
+	<body data-ng-app="myApp">
+		
+		<div> 
+						
+			<div>
+			
+				<div data-person="">
+				</div>
+				
+			</div>
+		</div>
+		
+		<script >
+		
+			angular.module("myApp", []);
+			
+			angular.module("myApp").controller("MyCtrl", ['$scope', function($scope) {
+			
+				$scope.persona = {
+					nome:"qwe",
+					cognome:"asd"
+				}
+				
+				
+			}]);
+			
+			angular.module("myApp").directive('person', function() {
+		
+				var ctrl = function($scope) {
+					$scope.persona = {
+						nome:"qwe",
+						cognome:"asd"
+					};
+				};
+				
+				return {
+					template:"<p> {{persona.nome}} </p>",
+					controller : ctrl
+				};
+				
+			});
+		
+		</script>
+		
+	</body>
+	
+</html>

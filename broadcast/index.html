@@ -1,0 +1,93 @@
+<html> 
+
+	<head>
+		<script 
+			src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.js">
+		</script>
+	</head>
+	
+	<body data-ng-app="myApp">
+		
+		<div> 
+			<div data-ng-controller="MyCtrl1">
+				<input type="text" data-ng-model="myElem" /> <br/>
+				testo in broadcast : {{myElem}}
+				<input type="button" value="invia" data-ng-click="send()" />
+			</div>
+			
+			<div data-ng-controller="MyCtrl2">
+				testo in broadcast : {{myElem}}
+			</div>
+			
+			<div data-ng-controller="MyCtrl3">
+				testo in broadcast : {{myElem}}
+			</div>
+			
+			<div data-ng-controller="MyCtrl4">
+				testo in broadcast : {{myElem}}
+			</div>
+		</div>
+		
+		<script>
+			angular.module("myApp", []);
+			
+			angular.module("myApp").factory("ServiceBroadcast", ['$rootScope', function($rootScope) {
+				
+				var listner = function($scope, handler) {
+					$scope.$on("msg", function(event, elemBroadcasted) {
+						handler(elemBroadcasted);
+					});
+				};
+				
+				var sender = function(myElem) {
+					$rootScope.$broadcast("msg", myElem);
+				};
+				
+				return {
+					listner : listner,
+					sender : sender
+				};
+				
+			}]);
+			
+			angular.module("myApp").controller("MyCtrl1", ['$scope', '$rootScope', 'ServiceBroadcast', 				
+				function($scope, $rootScope, ServiceBroadcast) {
+				
+					ServiceBroadcast.listner($scope, function(elem){
+						$scope.myElem = elem;
+					});
+					
+					$scope.send = function() {
+						ServiceBroadcast.sender($scope.myElem);
+					}
+				}
+			]);
+			
+			angular.module("myApp").controller("MyCtrl2", ['$scope', 'ServiceBroadcast', 				
+				function($scope, ServiceBroadcast) {
+						ServiceBroadcast.listner($scope, function(elem){
+						$scope.myElem = elem;
+					});									
+				}
+			]);
+			
+			angular.module("myApp").controller("MyCtrl3", ['$scope', 'ServiceBroadcast', 				
+				function($scope, ServiceBroadcast) {
+					ServiceBroadcast.listner($scope, function(elem){
+						$scope.myElem = elem;
+					});									
+				}
+			]);
+			
+			angular.module("myApp").controller("MyCtrl4", ['$scope', 'ServiceBroadcast', 				
+				function($scope, ServiceBroadcast) {
+					ServiceBroadcast.listner($scope, function(elem){
+						$scope.myElem = elem;		
+					});
+				}
+			]);
+			
+		</script>
+	</body>
+
+</html>
